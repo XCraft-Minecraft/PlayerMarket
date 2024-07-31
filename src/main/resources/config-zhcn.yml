@@ -1,0 +1,329 @@
+#-----------------------------------------------------------------------------------------------#
+#     _____  _          __      ________ _____    __  __          _____  _  ________ _______    #
+#    |  __ \| |        /\\ \   / /  ____|  __ \  |  \/  |   /\   |  __ \| |/ /  ____|__   __|   #
+#    | |__) | |       /  \\ \_/ /| |__  | |__) | | \  / |  /  \  | |__) | ' /| |__     | |      #
+#    |  ___/| |      / /\ \\   / |  __| |  _  /  | |\/| | / /\ \ |  _  /|  < |  __|    | |      #
+#    | |    | |____ / ____ \| |  | |____| | \ \  | |  | |/ ____ \| | \ \| . \| |____   | |      #
+#    |_|    |______/_/    \_\_|  |______|_|  \_\ |_|  |_/_/    \_\_|  \_\_|\_\______|  |_|      #
+#                                                                                               #
+#-----------------------------------------------------------------------------------------------#
+
+# PlayerMarket by Norbit4
+# 中文翻译 by Z1SHU
+
+# github: https://github.com/Norbit4
+# wiki: https://github.com/Norbit4/PlayerMarket
+
+# 如果你喜欢这个插件，请支持我一个正面的评价，谢谢！<3
+
+# 支持 HEX 代码
+# &<代码> 例如 &#ff5733
+# https://htmlcolorcodes.com/
+
+#---------------------------------------#
+#             [ 数据库 ]                #
+#---------------------------------------#
+# mysql/h2
+database:
+  type: 'h2'
+  database: 'playermarket'
+  host: 'jdbc:mysql://localhost:3306'
+  user: 'root'
+  password: 'password'
+  use-ssl: false
+
+#---------------------------------------#
+#             [ 命令 ]                  #
+#---------------------------------------#
+
+# /playermarket - 帮助命令
+# /playermarket reload - 重载插件
+
+main-command:
+  permission: 'playermarket.command.main'
+  no-permission: '&c你没有权限使用这个命令！'
+  reload: '&a插件已重载！'
+  # {CMD_MARKET} - 市场命令前缀
+  # {CMD_OFFER} - 出售命令前缀
+  help:
+    - '&8--------------- &a&lPLAYERMARKET &8---------------'
+    - ''
+    - '&7&l» &8&l/&a{CMD_MARKET} &7- &f打开市场！'
+    - '&7&l» &8&l/&a{CMD_OFFER} &7- &f出售一个物品！'
+    - '&7&l» &8&l/&aplayermarket reload &7- &f重载文件！'
+    - ''
+
+# /offer <价格> - 出售一个物品
+offer-command:
+  command: 'offer'
+  permission: 'playermarket.command.offer'
+  usage: '&c用法: /offer <价格>'
+  no-permission: '&c你没有权限使用这个命令！'
+  wrong-price: '&c价格变量无效！'
+  wrong-item: '&c你不能出售这个物品！'
+  success: '&a你已成功出售这个物品！'
+
+# /market - 打开市场
+market-command:
+  command: 'market'
+  permission: 'playermarket.command.market'
+  no-permission: '&c你没有权限使用这个命令！'
+
+#---------------------------------------#
+#              [ 全局 ]                 #
+#---------------------------------------#
+
+# 插件支持经济系统：
+#  Vault - https://www.spigotmc.org/resources/vault.34315/
+#  PlayerPoints - https://www.spigotmc.org/resources/playerpoints.80745/
+
+# 类型: [vault, playerpoints]
+economy:
+  type: 'vault'
+
+# {DATE} - 物品出售日期
+# {PRICE} - 物品价格
+# {SELLER} - 物品卖家
+market-offer-item-lore:
+  - '&8{DATE}'
+  - ''
+  - '&f价格: &a{PRICE}$'
+  - '&f卖家: &a{SELLER}'
+  - ''
+  - '&#dcee9a点击购买！'
+
+# {DATE} - 物品出售日期
+# {PRICE} - 物品价格
+player-offer-item-lore:
+  - '&8{DATE}'
+  - ''
+  - '&f价格: &a{PRICE}$'
+  - ''
+  - '&#dcee9a点击删除！'
+
+#---------------------------------------#
+#            [ 市场 - GUI ]             #
+#---------------------------------------#
+market-gui:
+  title: '&8&l市场 &7&l» &8&l{CATEGORY} ({TOTAL})'
+  your-offers-icon:
+    name: '&#93f182&l你的出售'
+    icon: 'CHEST'
+    lore:
+      - ''
+      - '&#dcee9a点击浏览！'
+  search-icon:
+    name: '&#93f182&l搜索'
+    icon: 'NAME_TAG'
+    lore:
+      - ''
+      - '&7输入物品名称...'
+      - ''
+      - '&#dcee9a点击搜索！'
+  previous-page-icon:
+    name: '&f&l上一页'
+    icon: 'ARROW'
+    lore:
+      - ''
+      - '&#dcee9a点击浏览！'
+  next-page-icon:
+    name: '&f&l下一页'
+    icon: 'ARROW'
+    lore:
+      - ''
+      - '&#dcee9a点击浏览！'
+
+#---------------------------------------#
+#       [ 铁站 - 输入 - 搜索 ]          #
+#---------------------------------------#
+anvil-input:
+  title: '&8&l输入物品'
+  empty: '空！'
+
+#---------------------------------------#
+#            [ 搜索 - GUI ]             #
+#---------------------------------------#
+search-gui:
+  title: '&8&l搜索 &7&l» &8&l{SEARCH}'
+  back-to-market-icon:
+    name: '&#93f182&l返回市场'
+    icon: 'BARRIER'
+    lore:
+      - ''
+      - '&#dcee9a点击返回！'
+  previous-page-icon:
+    name: '&f&l上一页'
+    icon: 'ARROW'
+    lore:
+      - ''
+      - '&#dcee9a点击浏览！'
+  next-page-icon:
+    name: '&f&l下一页'
+    icon: 'ARROW'
+    lore:
+      - ''
+      - '&#dcee9a点击浏览！'
+
+#---------------------------------------#
+#            [ 出售 - GUI ]             #
+#---------------------------------------#
+
+offers-limit:
+  enabled: true
+  default-limit: 5
+  # 用法:
+  # 例如: 'playermarket.offers.limit.15' => 15 个出售
+  permission: 'playermarket.offers.limit'
+  limit-message: '&c你已达到最大活跃出售数量！'
+
+offers-gui:
+  title: '&8&l你的出售'
+  remove-offer-message: '&c你的出售已被删除！'
+  nothing-to-get-message: '&c你没有可领取的钱！'
+  success-message: '&a你已成功收到 &2{MONEY}$ &a的售出出售！'
+  statistics-icon:
+    name: '&#93f182&l你的账户'
+    icon: 'CHEST'
+    lore:
+      # {OFFERS} - 玩家出售
+      # {OFFERS_LIMIT} - 玩家出售限制
+      # {MONEY_EARNED} - 玩家赚取的钱
+      # {ALL_SOLD} - 所有时间玩家售出的物品
+      # {ALL_MONEY_EARNED} - 所有时间玩家赚取的钱
+      - ''
+      - '&b◆ &f出售: &b{OFFERS}&8/&b{OFFERS_LIMIT}'
+      - '&d◆ &f售出出售: &d{SOLD}'
+      - '&a$ &f可领取的钱: &a{MONEY_EARNED}$'
+      - ''
+      - '&d◆ &f所有时间售出的物品: &d{ALL_SOLD}'
+      - '&a$ &f所有时间赚取的钱: &a{ALL_MONEY_EARNED}$'
+      - ''
+      - '&#dcee9a点击领取！'
+
+  back-to-market-icon:
+    name: '&#93f182&l返回市场'
+    icon: 'BARRIER'
+    lore:
+      - ''
+      - '&#dcee9a点击返回！'
+  previous-page-icon:
+    name: '&f&l上一页'
+    icon: 'ARROW'
+    lore:
+      - ''
+      - '&#dcee9a点击浏览！'
+  next-page-icon:
+    name: '&f&l下一页'
+    icon: 'ARROW'
+    lore:
+      - ''
+      - '&#dcee9a点击浏览！'
+
+#---------------------------------------#
+#            [ 购买 - GUI ]             #
+#---------------------------------------#
+buy-gui:
+  title: '&8&l购买物品'
+  item-sold-message: '&c这个出售已经售出！'
+  not-enough-money-message: '&c你没有足够的钱！'
+  player-is-owner-message: '&c你不能购买自己的物品！'
+  success-message: '&f你已购买物品，花费 &a&l{COST}$！'
+  accept-icon:
+    name: '&f&l购买花费 &a&l{AMOUNT}$！'
+    icon: 'GREEN_WOOL'
+    lore:
+      - ''
+      - '&#dcee9a点击购买！'
+  cancel-icon:
+    name: '&c&l返回'
+    icon: 'RED_WOOL'
+    lore:
+      - ''
+      - '&#dcee9a点击返回！'
+
+#---------------------------------------#
+#            [ 分类 ]                   #
+#---------------------------------------#
+category-name-format: '&#93f182&l{CATEGORY}'
+category-selected-lore:
+  - ''
+  - '&a&l已选择！'
+
+# 所有没有分类的物品将进入此分类
+other-category:
+  # 如果禁用，所有没有分类的物品将无法在商店购买
+  enabled: true
+  name: "其他"
+  icon: "ENDER_PEARL"
+  lore:
+    - ''
+    - '&#dcee9a点击浏览！'
+
+# 主页面分类，所有物品将显示在这里
+all-category:
+  enabled: true
+  name: "主分类"
+  icon: "NETHER_STAR"
+  lore:
+    - ''
+    - '&#dcee9a点击浏览！'
+
+# 分类，你可以添加更多分类
+# 文件是 /categories/{file}.yml
+categories:
+  1:
+    name: '方块'
+    icon: 'BRICKS'
+    file: 'blocks'
+    lore:
+      - ''
+      - '&#dcee9a点击浏览！'
+  2:
+    name: '盔甲'
+    icon: 'DIAMOND_CHESTPLATE'
+    file: 'armor'
+    lore:
+      - ''
+      - '&#dcee9a点击浏览！'
+  3:
+    name: '战斗'
+    icon: 'GOLDEN_SWORD'
+    file: 'combat'
+    lore:
+      - ''
+      - '&#dcee9a点击浏览！'
+  4:
+    name: '矿物'
+    icon: 'AMETHYST_SHARD'
+    file: 'minerals'
+    lore:
+      - ''
+      - '&#dcee9a点击浏览！'
+  5:
+    name: '自然'
+    icon: 'BAMBOO'
+    file: 'nature'
+    lore:
+      - ''
+      - '&#dcee9a点击浏览！'
+  6:
+    name: '红石'
+    icon: 'REDSTONE'
+    file: 'redstone'
+    lore:
+      - ''
+      - '&#dcee9a点击浏览！'
+  7:
+    name: '工具'
+    icon: 'IRON_PICKAXE'
+    file: 'tools'
+    lore:
+      - ''
+      - '&#dcee9a点击浏览！'
+  8:
+    name: '食物'
+    icon: 'ENCHANTED_GOLDEN_APPLE'
+    file: 'food'
+    lore:
+      - ''
+      - '&#dcee9a点击浏览！'
